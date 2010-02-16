@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{object}}</h1>
+
+<table class="ticket_info" id="ticket_{{ticket.pk}}">
+	<tr>
+		<th>Description</th>
+		<td>{{object.description}}</td>
+	</tr>
+	<tr>
+		<th>reported_by</th>
+		<td>{{object.reported_by}}</td>
+	</tr>
+	<tr>
+		<th>assigned_to</th>
+		<td>{{object.assigned_to}}</td>
+	</tr>
+	<tr>
+		<th>milestone</th>
+		<td>{{object.milestone}}</td>
+	</tr> 
+	<tr>
+		<th>component</th>
+		<td>{{object.component}}</td>
+	</tr> 
+	<tr>
+		<th>version</th>
+		<td>{{object.version}}</td>
+	</tr> 
+	<tr>
+		<th>keywords</th>
+		<td>{{object.keywords}}</td>
+	</tr> 
+	<tr>
+		<th>cc</th>
+		<td>{{object.cc}}</td>
+	</tr> 
+	<tr>
+		<th>triage_state</th>
+		<td>{{object.triage_state}}</td>
+	</tr> 
+	<tr>
+		<th>parameters</th>
+		<td>{{object.parameters.all}}</td>
+	</tr> 
+	<tr>
+		<th>time_opened</th>
+		<td>{{object.time_opened}}</td>
+	</tr> 
+	<tr>
+		<th>time_updated</th>
+		<td>{{object.time_updated}}</td>
+	</tr> 
+</table>
+
+<h2>Updates</h2>
+<div class="ticket_updates">
+{% for record in object.history.all %}
+{{record}}
+{% endfor %}
+</div>
+
+<h2>Post Attachment</h2>
+<form method="post" action="{% url ticketmanager.views.post_attachment ticket_id=object.pk %}">
+<div>
+<table>
+{{attachment_form}}
+</table>
+<input type="submit" value="Submit"/>
+</div>
+</form>
+
+<h2>Update Ticket</h2>
+<form method="post" action="{% url ticketmanager.views.post_comment ticket_id=object.pk %}">
+<div>
+<table>
+{{comment_form}}
+{{ticket_form}}
+</table>
+<input type="submit" value="Submit"/>
+</div>
+</form>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="../../../../">{% trans 'Home' %}</a> &rsaquo; 
+    <a href="../../../">{{ app_label|capfirst }}</a> &rsaquo; 
+    <a href="../../">{{ module_name }}</a> &rsaquo; 
+    <a href="../">{{ object|truncatewords:"18" }}</a> &rsaquo; 
+    {% trans 'History' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div class="module">
+{% if failure %}
+    <p>{{object}} failed audit: <span class="error">{{failure}}</span></p>
+{% else %}
+    <p>{{object}} passed audit</p>
+{% endif %}
+</div>
+</div>
+{% endblock %}

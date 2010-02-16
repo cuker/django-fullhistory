@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Ticket Listing</h1>
+<ul>
+{% for object in object_list %}
+<li><a href="{{object.get_absolute_url}}">{{object}}</a></li>
+{% endfor %}
+</ul>
+<a href="{% url ticketmanager.views.ticket_create %}">Create Ticket</a>
+{% endblock %}

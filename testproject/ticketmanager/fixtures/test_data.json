@@ -1,0 +1,53 @@
+[
+    {
+        "pk": 1, 
+        "model": "ticketmanager.triagestate", 
+        "fields": {
+            "order": 0, 
+            "title": "Unreviewed"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "ticketmanager.triagestate", 
+        "fields": {
+            "order": 1, 
+            "title": "Accepted"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "ticketmanager.triagestate", 
+        "fields": {
+            "order": 2, 
+            "title": "Fixed"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "ticketmanager.triagestate", 
+        "fields": {
+            "order": 2, 
+            "title": "Rejected"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "ticketmanager.ticket", 
+        "fields": {
+            "time_updated": "2009-03-31 04:13:17", 
+            "description": "This is a test ticket", 
+            "parameters": [], 
+            "reported_by": null, 
+            "assigned_to": null, 
+            "component": null, 
+            "summary": "Test Ticket", 
+            "cc": "", 
+            "time_opened": "2009-03-31 04:13:17", 
+            "version": null, 
+            "milestone": null, 
+            "keywords": "", 
+            "triage_state": 1
+        }
+    }
+]

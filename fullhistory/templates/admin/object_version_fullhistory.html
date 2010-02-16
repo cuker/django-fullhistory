@@ -1,0 +1,96 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+{% load history %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="../../../../../../">{% trans 'Home' %}</a> &rsaquo; 
+    <a href="../../../../../">{{ app_label|capfirst }}</a> &rsaquo; 
+    <a href="../../../../">{{ module_name }}</a> &rsaquo; 
+    <a href="../../../">{{ object|truncatewords:"18" }}</a> &rsaquo; 
+    <a href="../../">{% trans 'History' %}</a> &rsaquo; 
+    {% trans 'Version' %} {{version}}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<ul class="object-tools">
+{% if action.previous %}
+<li><a class="historylink" href="../{{version|add:"-1"}}/">{% trans 'Previous' %}</a></li>
+{% endif %}
+{% if action.next %}
+<li><a class="historylink" href="../{{version|add:"1"}}/">{% trans 'Next' %}</a></li>
+{% endif %}
+</ul>
+<div class="module">
+    <table id="change-request">
+        <tbody>
+        {% if action.request %}
+        <tr>
+            <th scope="row">{% trans 'User' %}</th>
+            <td>{{action.request.user_name}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{% trans 'Request Path' %}</th>
+            <td>{{action.request.request_path}}</td>
+        </tr>
+        {% if action.related_changes %}
+        <tr>
+            <th scope="row">{% trans 'Related Changes' %}</th>
+            <td>
+                <ul>
+                {% for history in action.related_changes %}
+                    {% if history|admin_history_version_link:admin_name %}
+                    <li><a href="{{ history|admin_history_version_link:admin_name }}">{{history}}</a></li>
+                    {% else %}
+                    <li>{{history}}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endif %}
+        {% endif %}
+        <tr>
+            <th scope="row">{% trans 'Date/time' %}</th>
+            <td>{{action.action_time|date:_("DATETIME_FORMAT")}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{% trans 'Site' %}</th>
+            <td>{{action.site}}</td>
+        </tr>
+        <tr>
+            <th scope="row">{% trans 'Action' %}</th>
+            <td>{% trans action.action_display %}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="module">
+    <table id="change-history">
+        <thead>
+        <tr>
+            <th scope="col">{% trans 'Attribute' %}</th>
+            <th scope="col">{% trans 'Previous Value' %}</th>
+            <th scope="col">{% trans 'New Value' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for key, value in action.data.items %}
+        <tr>
+            <th scope="row">{{key}}</th>
+            {% if value|length_is:2 %}
+            <td>{{ value.0 }}</td>
+            <td>{{ value.1 }}</td>
+            {% else %}
+            <td>&nbsp;</td>
+            <td>{{ value.0 }}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,2 @@
+from fullhistory import register_model
+from models import FullHistoryAdmin

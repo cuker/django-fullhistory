@@ -2,7 +2,8 @@ from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
-
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils import simplejson as json
 from django import forms   
 
 try:
@@ -16,24 +17,26 @@ class PickledObject(str):
        then it must [well, should] be a pickled one)."""
     pass
 
+def deserialize(value):
+    if isinstance(value, basestring):
+        try:
+            return json.loads(str(value))
+        except:
+            try:
+                return pickle.loads(str(value))
+            except:
+                return value
+    return value
+
 class PickledObjectField(models.Field):
     __metaclass__ = models.SubfieldBase
     
     def to_python(self, value):
-        if isinstance(value, PickledObject):
-            # If the value is a definite pickle; and an error is raised in de-pickling
-            # it should be allowed to propogate.
-            return pickle.loads(str(value))
-        else:
-            try:
-                return pickle.loads(str(value))
-            except:
-                # If an error was raised, just return the plain value
-                return value
+        return deserialize(value)
     
     def get_db_prep_save(self, value):
         if value is not None and not isinstance(value, PickledObject):
-            value = PickledObject(pickle.dumps(value))
+            value = PickledObject(json.dumps(value, cls=DjangoJSONEncoder))
         return value
     
     def get_internal_type(self): 

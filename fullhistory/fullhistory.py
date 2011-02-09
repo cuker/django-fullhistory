@@ -5,6 +5,7 @@ except ImportError:
 
 from django.db.models import signals
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 
 from models import FullHistory, Request
@@ -161,11 +162,17 @@ REGISTERED_MODELS = dict()
 def init_history_signal(instance, **kwargs):
     if instance.pk is not None:
         handler = REGISTERED_MODELS[type(instance)]
-        handler.prepare_initial(instance)
-        handler.apply_parents(instance, handler.prepare_initial)
+        try:
+            handler.prepare_initial(instance)
+            handler.apply_parents(instance, handler.prepare_initial)
+        except ObjectDoesNotExist:
+            pass
 
 def save_history_signal(instance, created, **kwargs):
-    REGISTERED_MODELS[type(instance)].create_history(instance, created and 'C' or 'U')
+    try:
+        REGISTERED_MODELS[type(instance)].create_history(instance, created and 'C' or 'U')
+    except ObjectDoesNotExist:
+        pass
 
 def delete_history_signal(instance, **kwargs):
     REGISTERED_MODELS[type(instance)].create_history(instance, 'D')

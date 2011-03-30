@@ -4,12 +4,12 @@ except ImportError:
     import dummy_thread as thread
 
 from django.db.models import signals
-from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.contenttypes.models import ContentType
 
 from models import FullHistory, Request
 from signals import post_create, post_adjust
+from serializers import Serializer, Deserializer
 
 # The state is a dictionary of lists. The key to the dict is the current
 # thread and the list is handled as a stack of values.
@@ -79,7 +79,9 @@ class FullHistoryHandler(object):
         '''
         Returns a dictionary of all persistant values of an object
         '''
-        serial = serializers.serialize("python", [entry])[0]
+        serializer = Serializer()
+        serial = serializer.serialize([entry])
+        serial = serial[0]
         serial['fields'][entry._meta.pk.name] = serial['pk']
         return serial['fields']
 
@@ -93,7 +95,7 @@ class FullHistoryHandler(object):
         info = {'pk': data.pop(self.model._meta.pk.name),
                 'model': "%s.%s" % (self.model._meta.app_label, self.model._meta.object_name.lower()),
                 'fields': data}
-        return list(serializers.deserialize("python", [info]))[0]
+        return list(Deserializer([info]))[0]
 
     def create_history(self, entry, action):
         '''

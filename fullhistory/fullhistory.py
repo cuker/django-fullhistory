@@ -92,7 +92,7 @@ class FullHistoryHandler(object):
         return data
 
     def get_object(self, data):
-        info = {'pk': data.pop(self.model._meta.pk.name),
+        info = {'pk': data.pop(self.model._meta.pk.name, None),
                 'model': "%s.%s" % (self.model._meta.app_label, self.model._meta.object_name.lower()),
                 'fields': data}
         return list(Deserializer([info]))[0]

@@ -4,7 +4,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.serializers.json import DjangoJSONEncoder, simplejson
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 
 import datetime
 
@@ -123,7 +124,7 @@ class FullHistory(models.Model):
         self._data = ENCODER.encode(val)
 
     def get_data(self):
-        return simplejson.loads(self._data)
+        return json.loads(self._data)
 
     data = property(get_data, set_data)
 

@@ -1,12 +1,16 @@
-from django.conf.urls.defaults import *
+try:
+    from django.conf.urls import patterns, include
+except ImportError:
+    from django.conf.urls.default import patterns, include
 
 # Uncomment the next two lines to enable the admin:
-#from fullhistory.admin import FullHistoryAdminSite
+# from fullhistory.admin import FullHistoryAdminSite
 from django.contrib import admin
 #admin.site = FullHistoryAdminSite()
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     # Example:
     (r'^ticketmanager/', include('ticketmanager.urls')),
 
